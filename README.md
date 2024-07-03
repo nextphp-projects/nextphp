@@ -44,9 +44,9 @@ NextPHP evolved from LeanPHP, NovaPHP, and NGPHP, each bringing unique strengths
 
 NextPHP offers a range of packages to enhance functionality and streamline development:
 
-- **nextphp/rest:** RESTful API operations.
-- **nextphp/data:** CRUD operations and database adapters.
-- **nextphp/orm:** Object-Relational Mapping.
+- **nextphp/rest:** - [Nextphp\Data](https://github.com/nextphp-projects/rest): RESTful API operations. 
+- **nextphp/data:** - [Nextphp\Data](https://github.com/nextphp-projects/data): CRUD and All operations and database adapters.
+- **nextphp/orm:**  - [Nextphp\Data](https://github.com/nextphp-projects/data): Object-Relational Mapping.
 - **nextphp/logging:** Logging operations.
 - **nextphp/reporting:** Reporting functionalities.
 - **nextphp/mail:** Email operations.
@@ -93,7 +93,7 @@ We welcome contributions! Here’s how you can help:
 - **Submit Pull Requests:** Improve the codebase.
 - **Enhance Documentation:** Help us improve our docs.
 
-For more details, see our [Contribution Guidelines](contribution-guidelines.md).
+For more details, see our [Contribution Guidelines](contribution.md).
 
 ## Resources
 
