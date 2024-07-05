@@ -274,10 +274,19 @@ Example for your Project Structure
 ```code
 example/
 ├── src/
-│   ├── Entity/User.php
-│   ├── Repository/UserRepository.php
-│   ├── Service/UserService.php
-├── example.php
+│   ├── Entity/
+│   │   ├── User.php
+│   │   ├── Post.php
+│   ├── Repository/
+│   │   ├── UserRepository.php
+│   │   ├── PostRepository.php
+│   ├── Service/
+│   │   ├── UserService.php
+│   │   ├── PostService.php
+│   ├── Resource/
+│   │   ├── UserResource.php
+│   │   ├── PostResource.php
+├── index.php
 ├── composer.json
 └── README.md
 ```
