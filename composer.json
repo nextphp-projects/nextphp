@@ -2,7 +2,7 @@
     "name": "nextphp/nextphp",
     "description": "NextPHP is a modern and lightweight PHP framework designed for performance and scalability. It offers powerful routing capabilities, comprehensive HTTP handling, and efficient database operations. NextPHP is ideal for developers looking to build high-performance web applications with ease.",
     "type": "library",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "license": "MIT",
     "authors": [
         {
