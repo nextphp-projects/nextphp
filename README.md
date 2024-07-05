@@ -84,15 +84,36 @@ Unlike some other frameworks that can be cumbersome and resource-intensive, Next
 - **Scalability:** Designed with scalability in mind, making it easy to grow your application as your business expands.
 - **Security:** Built-in security features ensure your applications are protected from common vulnerabilities.
 
-# Example Project using NextPHP Data
+# NextPHP Framework Usage Documentation
 
-This is an example project demonstrating the usage of the NextPHP Data package, which includes ORM and direct SQL query capabilities.
+## Overview
+The NextPHP Framework is a modern and lightweight PHP framework. Designed for high performance and scalability, it offers a comprehensive set of tools and libraries to accelerate the development process. The framework includes various packages such as NextPHP Rest and NextPHP Data.
+
+## Features
+- Supports all RESTful methods (GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, TRACE, CONNECT, PRI)
+- Response formats: JSON, XML, HTML, TEXT, CSV
+- Attribute-based route definitions
+- Middleware and JWT support
+- Attribute-based entity definitions with ORM
+- Direct SQL query capabilities
+- Relationship management (OneToMany, ManyToOne, etc.)
+- Easy integration with existing projects
+
+## Installation
+
+### Installation with Composer
+To add the NextPHP package to your project, run the following command using Composer:
+
+```bash
+composer require nextphp/nextphp
+```
 
 ## Basic Usage
+NextPHP comes ***with an example project demonstrating a full multi-layered architecture CRUD operation*** with ***User*** and ***Post*** examples.
+
+
 ### Defining Entities
 Entities represent the tables in your database. Use attributes to define the properties and their types.
-
-### Using Entity
 
 ```php
 <?php
@@ -125,7 +146,7 @@ class User
 ```
 
 ### Advanced Entity Usage
-Relationships OneToMany and ManyToOne
+Relationships OneToMany, OnetoOne, ManyToOne and ManytoMany. 
 Define relationships using attributes.
 
 ```php
@@ -315,7 +336,6 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    #[Transactional]
     public function registerUser(array $userData): User
     {
         $user = new User();
