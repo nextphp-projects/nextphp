@@ -289,29 +289,6 @@ class UserService
 }
 ```
 
-### Example Project
-Example for your Project Structure
-
-```code
-example/
-├── src/
-│   ├── Entity/
-│   │   ├── User.php
-│   │   ├── Post.php
-│   ├── Repository/
-│   │   ├── UserRepository.php
-│   │   ├── PostRepository.php
-│   ├── Service/
-│   │   ├── UserService.php
-│   │   ├── PostService.php
-│   ├── Resource/
-│   │   ├── UserResource.php
-│   │   ├── PostResource.php
-├── index.php
-├── composer.json
-└── README.md
-```
-
 ### Using Resource
 This is an example project demonstrating the usage of the NextPHP Rest package, which includes routing and HTTP handling capabilities.
 Basic Usage Defining Routes Define routes using attributes to map HTTP methods to controller actions.
@@ -421,9 +398,9 @@ class UserService
 ```
 
 
-## Testing
+## Generate the index.php file
 
-To test the NextPHP Data package, you can create an `index.php` file and use the service layer to perform various CRUD operations. Here is an example of how you can do this:
+To start the NextPHP package, you can create an `index.php` file and use the service layer to perform various CRUD operations. Here is an example of how you can do this:
 
 ### Example index or example.php
 
@@ -474,6 +451,28 @@ if ($response) {
 }
 ```
 
+### Project Architecture
+Example for your Project Structure
+
+```code
+example/
+├── src/
+│   ├── Entity/
+│   │   ├── User.php
+│   │   ├── Post.php
+│   ├── Repository/
+│   │   ├── UserRepository.php
+│   │   ├── PostRepository.php
+│   ├── Service/
+│   │   ├── UserService.php
+│   │   ├── PostService.php
+│   ├── Resource/
+│   │   ├── UserResource.php
+│   │   ├── PostResource.php
+├── index.php
+├── composer.json
+└── README.md
+```
 
 ## Contributing
 
