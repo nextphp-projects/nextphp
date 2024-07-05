@@ -1,0 +1,22 @@
+# Necessary to prevent problems when using controllers named "index" and having a root index.php
+Options -MultiViews
+
+# Activates URL rewriting
+RewriteEngine On
+
+# Set the base directory for URL rewriting
+# RewriteBase /
+RewriteBase /nextphp/
+
+# Prevent people from looking directly into folders
+Options -Indexes
+
+# If the following conditions are true, then rewrite the URL:
+# If the requested filename is not a directory,
+RewriteCond %{REQUEST_FILENAME} !-d
+# and if the requested filename is not a regular file that exists,
+RewriteCond %{REQUEST_FILENAME} !-f
+# and if the requested filename is not a symbolic link,
+RewriteCond %{REQUEST_FILENAME} !-l
+# then rewrite the URL to the public/index.php file,
+RewriteRule ^(.*)$ index.php [L,QSA]

@@ -1,0 +1,61 @@
+# Composer dependencies
+/vendor/
+composer.lock
+
+# PHPStorm / JetBrains IDE
+.idea/
+
+# PHPStorm generated files
+/.idea/*
+
+# PhpStorm Project Settings
+/.idea/.name
+
+# PhpStorm Icon
+.idea/icon.png
+
+# Laravel / Symfony cached files
+bootstrap/cache/
+var/cache/
+var/logs/
+var/sessions/
+
+# Environment variables
+.env
+.env.*
+
+# Node modules
+/node_modules/
+
+# Temporary files
+/tmp/
+temp/
+tmp/*
+temp/*
+*.swp
+*.log
+*.tmp
+
+# Logs and databases
+*.log
+# *.sql
+# *.sqlite
+
+# Vagrant
+.vagrant/
+
+# Other
+*.DS_Store
+Thumbs.db
+
+# Coverage reports
+coverage/
+.cache/
+.php_cs.cache
+
+# PHPUnit
+/.phpunit.result.cache
+phpunit.xml
+phpunit.xml.dist
+testdox.xml
+testdox.html

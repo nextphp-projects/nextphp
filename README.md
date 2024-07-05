@@ -113,4 +113,3 @@ For more details, see our [Contribution Guidelines](contribution.md).
 - **GitHub Issues:** [NextPHP GitHub](https://github.com/nextphp-projects/nextphp/issues)
 
 Thank you for being part of the NextPHP community!
-

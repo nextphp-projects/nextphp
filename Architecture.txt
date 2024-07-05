@@ -1,0 +1,17 @@
+example-project/
+├── app/
+│   ├── Entity/
+│   │   └── User.php
+│   ├── Repository/
+│   │   └── UserRepository.php
+│   ├── Service/
+│   │   └── UserService.php
+├── vendor/
+│   ├── nextphp/data
+│   ├── nextphp/rest
+├── composer.json
+├── index.php
+├── CONTRIBUTING.php
+├── FAQ.php
+├── LICENSE.php
+├── README.php

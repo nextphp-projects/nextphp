@@ -1,0 +1,118 @@
+@hostname=http://localhost
+@folder=nextphp
+@path=api
+@userAgent=NextPHP_RestClient
+
+### ÇALIŞIYOR TEST EDİLDİ YALDNIZ PATCH METODU KODDA YOK
+### Kullanıcı İstekleri
+
+# Tüm kullanıcıları getir
+GET {{hostname}}/{{folder}}/{{path}}/users HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+# Belirli bir kullanıcıyı getir
+GET {{hostname}}/{{folder}}/{{path}}/users/4 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+###
+
+# Yeni bir kullanıcı oluştur
+POST {{hostname}}/{{folder}}/{{path}}/users HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+{
+    "name": "Yasemin Yıldırım",
+    "email": "yasemin@nextphp.com",
+    "password": "vedyweb123"
+}
+
+###
+
+# Belirli bir kullanıcıyı güncelle
+PUT {{hostname}}/{{folder}}/{{path}}/users/6 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+{
+    "name": "Smra SZR",
+    "email": "sny.szr@example.com",
+    "password": "newpassword123"
+}
+
+###
+
+# Belirli bir kullanıcının bazı alanlarını güncelle
+PATCH {{hostname}}/{{folder}}/{{path}}/users/6 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+{
+    "email": "VY.smith@newdomain.com"
+}
+
+###
+
+# Belirli bir kullanıcıyı sil
+DELETE {{hostname}}/{{folder}}/{{path}}/users/5 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+
+### ÇALIŞIYOR TEST EDİLDİ YALDNIZ PATCH METODU KODDA YOK
+### Gönderi (Post) İstekleri 
+
+# Tüm gönderileri getir
+GET {{hostname}}/{{folder}}/{{path}}/posts HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+###
+
+# Belirli bir gönderiyi getir
+GET {{hostname}}/{{folder}}/{{path}}/posts/2 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+###
+
+# Yeni bir gönderi oluştur
+POST {{hostname}}/{{folder}}/{{path}}/posts HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+{
+    "title": "Deneme Yazısı",
+    "content": "This is the Deneme Content of my first post.",
+    "user_id": 1
+}
+
+###
+
+# Belirli bir gönderiyi güncelle
+PUT {{hostname}}/{{folder}}/{{path}}/posts/4 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+{
+    "title": "Updated Deneme Yazısı",
+    "content": "This is the updated deneme content of the post."
+}
+
+# Belirli bir gönderinin bazı alanlarını güncelle
+PATCH {{hostname}}/{{folder}}/{{path}}/posts/1 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+{
+    "content": "This is the partially updated content of the post."
+}
+
+###
+
+# Belirli bir gönderiyi sil
+DELETE {{hostname}}/{{folder}}/{{path}}/posts/3 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
