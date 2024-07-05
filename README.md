@@ -84,6 +84,368 @@ Unlike some other frameworks that can be cumbersome and resource-intensive, Next
 - **Scalability:** Designed with scalability in mind, making it easy to grow your application as your business expands.
 - **Security:** Built-in security features ensure your applications are protected from common vulnerabilities.
 
+# Example Project using NextPHP Data
+
+This is an example project demonstrating the usage of the NextPHP Data package, which includes ORM and direct SQL query capabilities.
+
+## Basic Usage
+### Defining Entities
+Entities represent the tables in your database. Use attributes to define the properties and their types.
+
+### Using Entity
+
+```php
+<?php
+namespace Example;
+
+use NextPHP\Data\Persistence\Column;
+use NextPHP\Data\Persistence\Entity;
+use NextPHP\Data\Persistence\GeneratedValue;
+use NextPHP\Data\Persistence\Id;
+use NextPHP\Data\Persistence\Table;
+
+#[Entity(name: "users")]
+class User
+{
+    #[Id]
+    #[Column('INT AUTO_INCREMENT PRIMARY KEY', false)]
+    public int $id;
+
+    #[Column('VARCHAR(255)', false)]
+    public string $name;
+
+    #[Column('VARCHAR(255)', false)]
+    public string $email;
+
+    #[Column('VARCHAR(255)', false)]
+    public string $password;
+
+    // getters and setters
+}
+```
+
+### Advanced Entity Usage
+Relationships OneToMany and ManyToOne
+Define relationships using attributes.
+
+```php
+<?php
+namespace Example;
+
+use NextPHP\Data\Persistence\Column;
+use NextPHP\Data\Persistence\Entity;
+use NextPHP\Data\Persistence\GeneratedValue;
+use NextPHP\Data\Persistence\Id;
+use NextPHP\Data\Persistence\Table;
+
+#[Entity(name: "users")]
+class Post
+{
+    #[Id]
+    #[Column('INT AUTO_INCREMENT PRIMARY KEY', false)]
+    public int $id;
+
+    #[Column('VARCHAR(255)', false)]
+    public string $title;
+
+    #[Column('TEXT', false)]
+    public string $content;
+
+    #[Column('INT', false)]
+    public int $user_id;
+
+    // example for ManyToMany, OneToMany etc.
+    #[ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
+    private User $user;
+
+    // getters and setters
+}
+```
+
+### Using Repository
+Repositories handle database operations for entities. Extend ***BaseRepository*** and specify the entity class.
+
+```php
+<?php
+namespace Example;
+
+use NextPHP\Data\BaseRepository;
+
+#[Repository(entityClass: User::class)]
+class UserRepository extends BaseRepository
+{
+    // No need for constructor
+}
+```
+
+### Service Layer
+Services provide business logic and interact with repositories.
+
+```php
+<?php
+namespace Example;
+
+#[Service(description: 'User management service')]
+class UserService
+{
+    private UserRepository $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    #[Transactional]
+    public function registerUser(array $userData): User
+    {
+        $user = new User();
+        $user->name = $userData['name'];
+        $user->email = $userData['email'];
+        $user->password = password_hash($userData['password'], PASSWORD_DEFAULT);
+
+        $userArray = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $user->password,
+        ];
+
+        $this->userRepository->save($userArray);
+
+        return $user;
+    }
+
+    public function getAllUsers(): array
+    {
+        return $this->userRepository->findAll();
+    }
+
+    public function getUserById(int $id): ?User
+    {
+        $userArray = $this->userRepository->find($id);
+        if (!$userArray) {
+            return null;
+        }
+
+        $user = new User();
+        $user->id = $userArray['id'];
+        $user->name = $userArray['name'];
+        $user->email = $userArray['email'];
+        $user->password = $userArray['password'] ?? '';
+
+        return $user;
+    }
+
+    public function updateUser(int $id, array $data): ?User
+    {
+        $user = $this->getUserById($id);
+        if (!$user) {
+            return null;
+        }
+
+        foreach ($data as $key => $value) {
+            if (property_exists($user, $key)) {
+                $user->$key = $value;
+            }
+        }
+
+        $userArray = get_object_vars($user);
+        $this->userRepository->update($id, $userArray);
+
+        return $user;
+    }
+
+    public function deleteUser(int $id): bool
+    {
+        $user = $this->getUserById($id);
+        if (!$user) {
+            return false;
+        }
+
+        $this->userRepository->delete($id);
+
+        return true;
+    }
+}
+```
+
+### Example Project
+Example for your Project Structure
+
+```code
+example/
+├── src/
+│   ├── Entity/User.php
+│   ├── Repository/UserRepository.php
+│   ├── Service/UserService.php
+├── example.php
+├── composer.json
+└── README.md
+```
+
+### Using Resource
+This is an example project demonstrating the usage of the NextPHP Rest package, which includes routing and HTTP handling capabilities.
+Basic Usage Defining Routes Define routes using attributes to map HTTP methods to controller actions.
+
+```php
+<?php
+
+namespace NextPHP\App\Service;
+
+use NextPHP\App\Repository\UserRepository;
+use NextPHP\App\Entity\User;
+use NextPHP\Data\Service;
+use NextPHP\Data\Persistence\Transactional;
+
+#[Service(description: 'User management service')]
+class UserService
+{
+    private UserRepository $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    #[Transactional]
+    public function registerUser(array $userData): User
+    {
+        $user = new User();
+        $user->name = $userData['name'];
+        $user->email = $userData['email'];
+        $user->password = password_hash($userData['password'], PASSWORD_DEFAULT);
+
+        $userArray = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $user->password,
+        ];
+
+        $this->userRepository->save($userArray);
+
+        return $user;
+    }
+
+    public function getAllUsers(): array
+    {
+        return $this->userRepository->findAll();
+    }
+
+    public function getUserById(int $id): ?User
+    {
+        $userArray = $this->userRepository->find($id);
+        if (!$userArray) {
+            return null;
+        }
+
+        $user = new User();
+        $user->id = $userArray['id'];
+        $user->name = $userArray['name'];
+        $user->email = $userArray['email'];
+        $user->password = $userArray['password'] ?? '';
+
+        return $user;
+    }
+
+    public function updateUser(int $id, array $data): ?User
+    {
+        $user = $this->getUserById($id);
+        if (!$user) {
+            return null;
+        }
+
+        foreach ($data as $key => $value) {
+            if (property_exists($user, $key)) {
+                $user->$key = $value;
+            }
+        }
+
+        $userArray = get_object_vars($user);
+        $this->userRepository->update($id, $userArray);
+
+        return $user;
+    }
+
+    public function patchUser(int $id, array $data)
+    {
+        $user = $this->getUserById($id);
+        if (!$user) {
+            return null;
+        }
+
+        $this->userRepository->save($user);
+
+        return $user;
+    }
+
+    public function deleteUser(int $id): bool
+    {
+        $user = $this->getUserById($id);
+        if (!$user) {
+            return false;
+        }
+
+        $this->userRepository->delete($id);
+
+        return true;
+    }
+}
+```
+
+
+## Testing
+
+To test the NextPHP Data package, you can create an `index.php` file and use the service layer to perform various CRUD operations. Here is an example of how you can do this:
+
+### Example index or example.php
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use NextPHP\Rest\DI\Container;
+use NextPHP\Rest\Router;
+use NextPHP\Rest\Http\Request;
+use NextPHP\Rest\Http\Response;
+use NextPHP\App\Resource\UserResource;
+use NextPHP\App\Resource\PostResource;
+
+$container = new Container();
+
+$router = new Router([
+    'baseUri' => '/nextphp-beta',
+    'allowedOrigins' => [
+        'http://allowed-origin.com' => ['GET', 'POST'],
+        'http://another-allowed-origin.com' => ['GET', 'PUT'],
+        '*' => ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD', 'TRACE', 'CONNECT', 'PRI']
+    ]
+], $container);
+
+// DI
+$router->registerRoutesFromController(UserResource::class);
+$router->registerRoutesFromController(PostResource::class);
+
+$uri = $_SERVER['REQUEST_URI'];
+$method = $_SERVER['REQUEST_METHOD'];
+
+$request = new Request($method, $uri, getallheaders(), file_get_contents('php://input'), $_GET, $_POST);
+$response = new Response();
+
+$response = $router->dispatch($request, $response);
+
+if ($response) {
+    http_response_code($response->getStatusCode());
+    foreach ($response->getHeaders() as $name => $value) {
+        header("$name: $value");
+    }
+    echo $response->getBody();
+} else {
+    http_response_code(500);
+    echo json_encode(['error' => 'Internal Server Error', 'message' => 'No response returned.']);
+}
+```
+
+
 ## Contributing
 
 We welcome contributions! Here’s how you can help:
