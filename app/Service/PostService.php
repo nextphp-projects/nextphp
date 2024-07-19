@@ -4,7 +4,7 @@ namespace NextPHP\App\Service;
 
 use NextPHP\App\Repository\PostRepository;
 use NextPHP\App\Entity\Post;
-use NextPHP\Data\Service;
+use NextPHP\Rest\Service;
 use NextPHP\Data\Persistence\Transactional;
 
 

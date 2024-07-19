@@ -4,7 +4,7 @@ namespace NextPHP\App\Service;
 
 use NextPHP\App\Repository\UserRepository;
 use NextPHP\App\Entity\User;
-use NextPHP\Data\Service;
+use NextPHP\Rest\Service;
 use NextPHP\Data\Persistence\Transactional;
 
 #[Service(description: 'User management service')]

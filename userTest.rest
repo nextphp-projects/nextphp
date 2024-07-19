@@ -11,8 +11,16 @@ GET {{hostname}}/{{folder}}/{{path}}/users HTTP/1.1
 Content-Type: application/json
 User-Agent: {{userAgent}}
 
+###
+
+GET {{hostname}}/{{folder}}/{{path}}/users2 HTTP/1.1
+Content-Type: application/json
+User-Agent: {{userAgent}}
+
+###
+
 # Belirli bir kullanıcıyı getir
-GET {{hostname}}/{{folder}}/{{path}}/users/4 HTTP/1.1
+GET {{hostname}}/{{folder}}/{{path}}/users/6 HTTP/1.1
 Content-Type: application/json
 User-Agent: {{userAgent}}
 

@@ -11,7 +11,7 @@ use NextPHP\Rest\Http\Delete;
 use NextPHP\Rest\Http\Patch;
 use NextPHP\Rest\Http\RouteGroup;
 use NextPHP\Rest\Http\Middleware;
-use NextPHP\Rest\Middleware\AuthMiddleware;
+use NextPHP\App\Middleware\RequestLoggerMiddleware;
 use NextPHP\App\Service\UserService;
 
 #[RouteGroup('/api')]
@@ -30,6 +30,20 @@ class UserResource
     {
         $users = $this->userService->getAllUsers();
         return $response->withJSON(['users' => $users]);
+    }
+
+    #[Get('/users2')]
+    public function getAllUsers2(Request $request, Response $response)
+    {
+        // Middleware'i burada çağırıyoruz
+        $middleware = new RequestLoggerMiddleware();
+        $middleware->handle($request, function($request) use ($response) {
+            $users = $this->userService->getAllUsers();
+            return $response->withJSON(['users' => $users]);
+        });
+        
+        // Middleware handle işlemi sonucu response döner
+        return $response;
     }
 
     #[Get('/users/{id}')]
