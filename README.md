@@ -296,103 +296,116 @@ Basic Usage Defining Routes Define routes using attributes to map HTTP methods t
 ```php
 <?php
 
-namespace NextPHP\App\Service;
+namespace NextPHP\App\Resource;
 
-use NextPHP\App\Repository\UserRepository;
-use NextPHP\App\Entity\User;
-use NextPHP\Data\Service;
-use NextPHP\Data\Persistence\Transactional;
+use NextPHP\Rest\Http\Request;
+use NextPHP\Rest\Http\Response;
+use NextPHP\Rest\Http\Get;
+use NextPHP\Rest\Http\Post;
+use NextPHP\Rest\Http\Put;
+use NextPHP\Rest\Http\Delete;
+use NextPHP\Rest\Http\Patch;
+use NextPHP\Rest\Http\RouteGroup;
+use NextPHP\Rest\Http\Middleware;
+use NextPHP\App\Middleware\RequestLoggerMiddleware;
+use NextPHP\App\Service\UserService;
 
-#[Service(description: 'User management service')]
-class UserService
+#[RouteGroup('/api')]
+// #[Middleware(AuthMiddleware::class)]
+class UserResource
 {
-    private UserRepository $userRepository;
+    private UserService $userService;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserService $userService)
     {
-        $this->userRepository = $userRepository;
+        $this->userService = $userService;
     }
 
-    public function registerUser(array $userData): User
+    #[Get('/users')]
+    public function getAllUsers(Request $request, Response $response)
     {
-        $user = new User();
-        $user->name = $userData['name'];
-        $user->email = $userData['email'];
-        $user->password = password_hash($userData['password'], PASSWORD_DEFAULT);
-
-        $userArray = [
-            'name' => $user->name,
-            'email' => $user->email,
-            'password' => $user->password,
-        ];
-
-        $this->userRepository->save($userArray);
-
-        return $user;
+        $users = $this->userService->getAllUsers();
+        return $response->withJSON(['users' => $users]);
     }
 
-    public function getAllUsers(): array
+    #[Get('/users2')]
+    public function getAllUsers2(Request $request, Response $response)
     {
-        return $this->userRepository->findAll();
+        // Middleware'i burada çağırıyoruz
+        $middleware = new RequestLoggerMiddleware();
+        $middleware->handle($request, function($request) use ($response) {
+            $users = $this->userService->getAllUsers();
+            return $response->withJSON(['users' => $users]);
+        });
+        
+        // Middleware handle işlemi sonucu response döner
+        return $response;
     }
 
-    public function getUserById(int $id): ?User
+    #[Get('/users/{id}')]
+    public function getUserById(Request $request, Response $response, $id)
     {
-        $userArray = $this->userRepository->find($id);
-        if (!$userArray) {
-            return null;
+        $user = $this->userService->getUserById((int)$id);
+        if ($user) {
+            return $response->withJSON($user);
+        } else {
+            return $response->withStatus(404)->withJSON(['error' => 'User not found']);
+        }
+    }
+
+    #[Post('/users')]
+    public function createUser(Request $request, Response $response)
+    {
+        $data = json_decode($request->getBody(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $response->withStatus(400)->withJSON(['error' => 'Invalid JSON provided']);
         }
 
-        $user = new User();
-        $user->id = $userArray['id'];
-        $user->name = $userArray['name'];
-        $user->email = $userArray['email'];
-        $user->password = $userArray['password'] ?? '';
-
-        return $user;
+        $user = $this->userService->registerUser($data);
+        return $response->withStatus(201)->withJSON($user);
     }
 
-    public function updateUser(int $id, array $data): ?User
+    #[Put('/users/{id}')]
+    public function updateUser(Request $request, Response $response, $id)
     {
-        $user = $this->getUserById($id);
-        if (!$user) {
-            return null;
+        $data = json_decode($request->getBody(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $response->withStatus(400)->withJSON(['error' => 'Invalid JSON provided']);
         }
-
-        foreach ($data as $key => $value) {
-            if (property_exists($user, $key)) {
-                $user->$key = $value;
-            }
+    
+        $user = $this->userService->updateUser((int)$id, $data);
+        if ($user) {
+            return $response->withJSON($user);
+        } else {
+            return $response->withStatus(404)->withJSON(['error' => 'User not found']);
         }
-
-        $userArray = get_object_vars($user);
-        $this->userRepository->update($id, $userArray);
-
-        return $user;
+    }
+    
+    #[Patch('/users/{id}')]
+    public function patchUser(Request $request, Response $response, $id)
+    {
+        $data = json_decode($request->getBody(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $response->withStatus(400)->withJSON(['error' => 'Invalid JSON provided']);
+        }
+    
+        $user = $this->userService->patchUser((int)$id, $data);
+        if ($user) {
+            return $response->withJSON($user);
+        } else {
+            return $response->withStatus(404)->withJSON(['error' => 'User not found']);
+        }
     }
 
-    public function patchUser(int $id, array $data)
+    #[Delete('/users/{id}')]
+    public function deleteUser(Request $request, Response $response, $id)
     {
-        $user = $this->getUserById($id);
-        if (!$user) {
-            return null;
+        $success = $this->userService->deleteUser((int)$id);
+        if ($success) {
+            return $response->withStatus(204);
+        } else {
+            return $response->withStatus(404)->withJSON(['error' => 'User not found']);
         }
-
-        $this->userRepository->save($user);
-
-        return $user;
-    }
-
-    public function deleteUser(int $id): bool
-    {
-        $user = $this->getUserById($id);
-        if (!$user) {
-            return false;
-        }
-
-        $this->userRepository->delete($id);
-
-        return true;
     }
 }
 ```
